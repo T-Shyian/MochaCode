@@ -1,0 +1,213 @@
+{
+  "info": {
+    "_postman_id": "5c039469-c6bb-4f2a-8cf9-e4de790b3d0e",
+    "name": "QA_DZ18_Shyian",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "49898599"
+  },
+  "item": [
+    {
+      "name": "Valid_ISBN10",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"1. Час відповіді не перевищує 500 мс\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"2. ISBN10 є дійсним\", function () {\r",
+              "    pm.expect(pm.response.text()).to.include(\"<m:IsValidISBN10Result>true</m:IsValidISBN10Result>\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"3. Відповідь містить IsValidISBN10Result\", function () {\r",
+              "    pm.expect(pm.response.text()).to.include(\"IsValidISBN10Result\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"4. Тіло відповіді не є порожнім\", function () {\r",
+              "    pm.expect(pm.response.text().length).to.be.above(50);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"5. Результат перевірки не містить False\", function () {\r",
+              "    pm.expect(pm.response.text()).to.not.include(\">false<\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"6. Заголовок Content-Type є в форматі XML\", function () {\r",
+              "    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"text/xml\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"7. Сервер передає заголовок Server\", function () {\r",
+              "    pm.response.to.have.header(\"Server\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"8. Відсутність помилок SOAP Fault\", function () {\r",
+              "    pm.expect(pm.response.text()).to.not.include(\"soap:Fault\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"9. Namespace відповідає контракту\", function () {\r",
+              "    pm.expect(pm.response.text()).to.include(\"http://webservices.daehosting.com/ISBN\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"10. Відсутність статус код 500 (Тестування контракту)\", function () {\r",
+              "    pm.response.to.not.have.status(500);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {
+          "content-type": true
+        }
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "text/xml; charset=utf-8",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n  <soap:Body>\r\n    <IsValidISBN10 xmlns=\"http://webservices.daehosting.com/ISBN\">\r\n      <sISBN>0-19-852663-6</sISBN>\r\n    </IsValidISBN10>\r\n  </soap:Body>\r\n</soap:Envelope>",
+          "options": {
+            "raw": {
+              "language": "xml"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://webservices.daehosting.com/services/isbnservice.wso",
+          "protocol": "http",
+          "host": [
+            "webservices",
+            "daehosting",
+            "com"
+          ],
+          "path": [
+            "services",
+            "isbnservice.wso"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Valid_ISBN13",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"3. Наявність заголовку Content-length\", function () {\r",
+              "    pm.response.to.have.header(\"Content-Length\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"4. Налаштування заголовку Cache-Control\", function () {\r",
+              "    pm.expect(pm.response.headers.get(\"Cache-Control\")).to.include(\"private\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"5. Час відповіді не перевищує 500 мс\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(500);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"6. Відповідь містить IsValidISBN13Result\", function () {\r",
+              "    pm.expect(pm.response.text()).to.include(\"IsValidISBN13Result\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"7. Результат запиту є булевим значенням\", function () {\r",
+              "    var responseBody = pm.response.text();\r",
+              "    var hasTrue = responseBody.includes(\">true<\");\r",
+              "    var hasFalse = responseBody.includes(\">false<\");\r",
+              "    pm.expect(hasTrue || hasFalse).to.be.true;\r",
+              "});\r",
+              "\r",
+              "pm.test(\"8. Довжина відповіді більша за нуль\", function () {\r",
+              "    var contentLength = parseInt(pm.response.headers.get(\"Content-Length\"));\r",
+              "    pm.expect(contentLength).to.be.above(0);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"9. Відсутність помилок SOAP Fault\", function () {\r",
+              "    pm.expect(pm.response.text()).to.not.include(\"soap:Fault\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"10. Відсутність статус код 500 (Тестування контракту)\", function () {\r",
+              "    pm.response.to.not.have.status(500);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.test(\"1. Перевірка налаштування заголовку Context-Type\", function () {",
+              "    var requestContentType = pm.request.headers.get(\"Content-Type\");",
+              "    pm.expect(requestContentType).to.include(\"text/xml\");",
+              "});",
+              "",
+              "pm.test(\"2. Заголовок Accept-Encoding підтримує gzip\", function () {",
+              "    var acceptEncoding = pm.request.headers.get(\"Accept-Encoding\");",
+              "    if (acceptEncoding) {",
+              "        pm.expect(acceptEncoding).to.include(\"gzip\");",
+              "    } else {",
+              "        pm.expect(true).to.be.true;",
+              "    }",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {
+          "content-type": true
+        }
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "text/xml; charset=utf-8",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\r\n  <soap:Body>\r\n    <IsValidISBN13 xmlns=\"http://webservices.daehosting.com/ISBN\">\r\n      <sISBN>978-0-13-235088-4</sISBN>\r\n    </IsValidISBN13>\r\n  </soap:Body>\r\n</soap:Envelope>",
+          "options": {
+            "raw": {
+              "language": "xml"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://webservices.daehosting.com/services/isbnservice.wso",
+          "protocol": "http",
+          "host": [
+            "webservices",
+            "daehosting",
+            "com"
+          ],
+          "path": [
+            "services",
+            "isbnservice.wso"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
